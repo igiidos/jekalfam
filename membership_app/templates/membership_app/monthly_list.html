@@ -1,0 +1,55 @@
+{% extends "membership_app/__base.html" %}
+
+{% block content %}
+    <div class="container-fluid py-3" style="background-color: #dddddd">
+        <div class="card my-2 border-0 shadow-sm bg-dark">
+            <div class="card-body">
+                <div class="col-12">
+                    <p class="card-text mb-0 text-light">총납입 : {{ total_in.money__sum }}원</p>
+                    <p class="card-text mb-0 text-light">총미납 : {{ total_less }}원</p>
+                    <p class="card-text mb-0 text-light">총출금 : {{ total_out.money__sum }}원</p>
+                    <p class="card-text mb-1 text-light">현잔액 : {{ total_result }}원</p>
+                </div>
+            </div>
+        </div>
+        {% for month in month_list %}
+            <div class="card my-2 border-0 shadow-sm">
+                <div class="card-body px-2 py-1">
+                    <div style="width: 5rem" class="float-left h-100">
+                        <span class="text-muted small mr-2">{{ month.make_year }}</span>
+                        <h3 class="card-title text-secondary">{{ month }}월</h3>
+                    </div>
+                    <div class="col-12">
+                        <span class="card-text mb-0 text-primary small">입금 : </span>
+                        {% for i in month.feemanager_set.all %}
+                            {% if i.status == 'on' and i.using == 'in' %}
+                                <span class="small">{{ i.members }}</span>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+{#                    <div class="col-12">#}
+{#                        <span class="card-text mb-0 text-danger small">부족 : </span>#}
+{#                    </div>#}
+                    <div class="col-12">
+                        <span class="card-text mb-0 text-danger small">출금 : </span>
+                        {% for i in month.feemanager_set.all %}
+                            {% if i.status == 'on' and i.using == 'out' %}
+                                <span class="small">{{ i.money }}</span>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% if request.user.is_staff %}
+                    <div class="col-12 text-right">
+{#                        <span class="text-secondary small">은지만보임 -> </span>#}
+                        <a href="#" class="btn btn-primary btn-sm">입금</a>
+                        <a href="#" class="btn btn-outline-danger btn-sm">출금</a>
+                    </div>
+                    {% endif %}
+
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+
+{% endblock %}

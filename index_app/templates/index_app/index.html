@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>제갈회비</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+</head>
+<body>
+<div class="bg-light">
+    <div class="col-10 col-lg-3 mx-auto pt-5">
+        <p class="text-center text-secondary" style="font-size : 500%;"><i class="fab fa-speakap"></i></p>
+        <p class="h6 text-right small text-secondary">제갈가족 회비관리</p>
+    </div>
+    <div class="col-10 col-lg-3 mx-auto">
+        {% if user.is_authenticated %}
+            <a href="{% url 'monthly_list' %}" class="btn btn-block btn-primary">프로그램 들어가기</a>
+            <a href="{% url 'logout' %}" class="btn btn-block btn-outline-warning">로그아웃</a>
+
+        {% else %}
+            <form class="form-signin" method="post">{% csrf_token %}
+                <label for="id_username" class="sr-only">아이디입력</label>
+                <div class="input-group">
+                    <div class="input-group-prepend mb-2">
+                        <div class="input-group-text"><i class="far fa-id-card"></i></div>
+                    </div>
+                    <input type="text" name="username" autofocus required id="id_username" class="form-control mb-2" placeholder="Input ID">
+                </div>
+                <label for="id_password" class="sr-only">Password</label>
+                <div class="input-group">
+                    <div class="input-group-prepend mb-2">
+                        <div class="input-group-text"><i class="fas fa-key"></i></div>
+                    </div>
+                    <input type="password" name="password" required id="id_password" class="form-control mb-2" placeholder="Password">
+                </div>
+                <button class="btn btn-lg btn-light btn-block border text-secondary" type="submit">Sign in</button>
+            </form>
+        {% endif %}
+        <p class="small mt-5 mb-1 text-muted text-danger">해당 웹 프로그램은 관리자 가족들의 회비를 관리하기 위해 관리자가
+            직접 개발한 웹 애플리케이션 입니다. 저작권은 개발자에게 있으며 기본적으로 개발자가 직접 등록한 아이디만 접속 할 수 있게
+            설계 되어 있기 때문에 비정상적(강제적)인 접속은 법적인 책임을 물을 수 있습니다.</p>
+        <p class="small mb-1 text-muted">&copy; Copyright | 2018-2019 | Ik Jekal | 기술문의 : igiidos@gmail.com</p>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+</body>
+</html>
