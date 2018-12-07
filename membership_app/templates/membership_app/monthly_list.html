@@ -20,23 +20,21 @@
                         <h3 class="card-title text-secondary">{{ month }}월</h3>
                     </div>
                     <div class="col-12">
-                        <span class="card-text mb-0 text-primary small">입금 : </span>
-                        {% for i in month.feemanager_set.all %}
-                            {% if i.status == 'on' and i.using == 'in' %}
-                                <span class="small">{{ i.members }}</span>
-                            {% endif %}
-                        {% endfor %}
+                        {% if month.total_in.money__sum is None %}
+                            <span class="card-text mb-0 text-primary small"><i class="fas fa-sign-in-alt"></i> 입금 : 0원</span>
+                        {% else %}
+                            <span class="card-text mb-0 text-primary small"><i class="fas fa-sign-in-alt"></i> 입금 : {{ month.total_in.money__sum }}원</span>
+                        {% endif %}
                     </div>
-{#                    <div class="col-12">#}
-{#                        <span class="card-text mb-0 text-danger small">부족 : </span>#}
-{#                    </div>#}
                     <div class="col-12">
-                        <span class="card-text mb-0 text-danger small">출금 : </span>
-                        {% for i in month.feemanager_set.all %}
-                            {% if i.status == 'on' and i.using == 'out' %}
-                                <span class="small">{{ i.money }}</span>
-                            {% endif %}
-                        {% endfor %}
+                        <span class="card-text mb-0 text-danger small"><i class="fas fa-times-circle"></i> 미납 : {{ month.total_no_in }}원</span>
+                    </div>
+                    <div class="col-12">
+                        {% if month.total_out.money__sum is None %}
+                            <span class="card-text mb-0 text-success small"><i class="fas fa-sign-out-alt"></i> 출금 : 0원</span>
+                        {% else %}
+                            <span class="card-text mb-0 text-success small"><i class="fas fa-sign-out-alt"></i> 출금 : {{ month.total_out.money__sum }}원</span>
+                        {% endif %}
                     </div>
                     {% if request.user.is_staff %}
                     <div class="col-12 text-right">
@@ -45,7 +43,6 @@
                         <a href="#" class="btn btn-outline-danger btn-sm">출금</a>
                     </div>
                     {% endif %}
-
                 </div>
             </div>
         {% endfor %}

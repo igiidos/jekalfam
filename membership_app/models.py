@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.db.models import Sum
 
 
 choice_month = (
@@ -44,6 +45,18 @@ class MonthList(models.Model):
 
 	class Meta:
 		ordering = ['-created_at']
+
+	def total_in(self):
+		return self.feemanager_set.filter(status='on', using='in').aggregate(Sum('money'))
+
+	def total_out(self):
+		return self.feemanager_set.filter(status='on', using='out').aggregate(Sum('money'))
+
+	def total_no_in(self):
+		if self.total_in()['money__sum'] is None:
+			return 120000
+		if self.total_in() is not None:
+			return 120000-int(self.total_in()['money__sum'])
 
 	def __str__(self):
 		return self.choice_month
