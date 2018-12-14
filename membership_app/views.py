@@ -1,7 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.db.models import Sum
 from django.contrib.auth.decorators import login_required
 from .models import FeeManager, MonthList, YearList
+from .forms import MonthListForm
+from django.views.generic.edit import FormView
 
 # Create your views here.
 
@@ -16,13 +18,6 @@ def monthly_list(request):
 	total_less = (month_count * 12 - total_fee.count())*10000
 	total_result = total_in['money__sum'] - total_out['money__sum']
 
-	# for month in month_list:
-	# 	if month.feemanager_set.all():
-	# 		monthly_in = month.feemanager_set.filter(using='in', status='on').aggregate(Sum('money'))
-	# 		print(monthly_in)
-		# for fee_list in month.feemanager_set.filter(using='in', status='on'):
-		# 	print("{}의 {}월 회비는 {}입니다.".format(fee_list.members, fee_list.select_month, fee_list.money))
-
 	context = {
 		'month_list': month_list,
 		'total_in': total_in,
@@ -32,4 +27,31 @@ def monthly_list(request):
 
 	}
 	return render(request, 'membership_app/monthly_list.html', context)
+
+
+@login_required
+def add_month(request):
+	if request.method == 'POST':
+		form = MonthListForm(request.POST)
+		if form.is_valid():
+			post = form.save()
+			post.save()
+			return redirect('monthly_list')
+	else:
+		form = MonthListForm()
+	context = {
+		'form': form
+	}
+	return render(request, 'membership_app/add_month.html', context)
+
+
+@login_required
+def month_detail(request, pk):
+	month = MonthList.objects.get(pk=pk)
+	details = FeeManager.objects.filter(select_month=month, status='on')
+	context = {
+		'month': month,
+		'details': details
+	}
+	return render(request, 'membership_app/month_detail.html', context)
 

@@ -12,39 +12,43 @@
                 </div>
             </div>
         </div>
+        {% if request.user.is_staff %}
+            <a href="{% url 'add_month' %}" class="btn btn-block btn-info">월추가</a>
+        {% endif %}
         {% for month in month_list %}
-            <div class="card my-2 border-0 shadow-sm">
-                <div class="card-body px-2 py-1">
-                    <div style="width: 5rem" class="float-left h-100">
-                        <span class="text-muted small mr-2">{{ month.make_year }}</span>
-                        <h3 class="card-title text-secondary">{{ month }}월</h3>
-                    </div>
-                    <div class="col-12">
-                        {% if month.total_in.money__sum is None %}
-                            <span class="card-text mb-0 text-primary small"><i class="fas fa-sign-in-alt"></i> 입금 : 0원</span>
-                        {% else %}
-                            <span class="card-text mb-0 text-primary small"><i class="fas fa-sign-in-alt"></i> 입금 : {{ month.total_in.money__sum }}원</span>
+            <a href="{% url 'month_detail' pk=month.pk %}" class="btn btn-block p-0 text-left">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body px-2 py-1">
+                        <div style="width: 5rem" class="float-left h-100">
+                            <span class="text-muted small mr-2">{{ month.make_year }}</span>
+                            <h3 class="card-title text-secondary">{{ month }}월</h3>
+                        </div>
+                        <div class="col-12">
+                            {% if month.total_in.money__sum is None %}
+                                <span class="card-text mb-0 text-primary small"><i class="fas fa-sign-in-alt"></i> 입금 : 0원</span>
+                            {% else %}
+                                <span class="card-text mb-0 text-primary small"><i class="fas fa-sign-in-alt"></i> 입금 : {{ month.total_in.money__sum }}원</span>
+                            {% endif %}
+                        </div>
+                        <div class="col-12">
+                            <span class="card-text mb-0 text-danger small"><i class="fas fa-times-circle"></i> 미납 : {{ month.total_no_in }}원</span>
+                        </div>
+                        <div class="col-12">
+                            {% if month.total_out.money__sum is None %}
+                                <span class="card-text mb-0 text-success small"><i class="fas fa-sign-out-alt"></i> 출금 : 0원</span>
+                            {% else %}
+                                <span class="card-text mb-0 text-success small"><i class="fas fa-sign-out-alt"></i> 출금 : {{ month.total_out.money__sum }}원</span>
+                            {% endif %}
+                        </div>
+                        {% if request.user.is_staff %}
+                        <div class="col-12 text-right">
+    {#                        <span class="text-secondary small">은지만보임 -> </span>#}
+                            <a href="#" class="badge badge-danger"><i class="far fa-trash-alt"></i> delete</a>
+                        </div>
                         {% endif %}
                     </div>
-                    <div class="col-12">
-                        <span class="card-text mb-0 text-danger small"><i class="fas fa-times-circle"></i> 미납 : {{ month.total_no_in }}원</span>
-                    </div>
-                    <div class="col-12">
-                        {% if month.total_out.money__sum is None %}
-                            <span class="card-text mb-0 text-success small"><i class="fas fa-sign-out-alt"></i> 출금 : 0원</span>
-                        {% else %}
-                            <span class="card-text mb-0 text-success small"><i class="fas fa-sign-out-alt"></i> 출금 : {{ month.total_out.money__sum }}원</span>
-                        {% endif %}
-                    </div>
-                    {% if request.user.is_staff %}
-                    <div class="col-12 text-right">
-{#                        <span class="text-secondary small">은지만보임 -> </span>#}
-                        <a href="#" class="btn btn-primary btn-sm">입금</a>
-                        <a href="#" class="btn btn-outline-danger btn-sm">출금</a>
-                    </div>
-                    {% endif %}
                 </div>
-            </div>
+            </a>
         {% endfor %}
     </div>
 

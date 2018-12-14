@@ -1,0 +1,13 @@
+{% extends "membership_app/__base.html" %}
+
+{% block content %}
+    <div class="container-fluid py-3">
+        <form action="" method="post" class="form-group">{% csrf_token %}
+            <label for="id_make_year">연도선택:</label>
+            <p>{{ form.make_year }}</p>
+            <label for="id_choice_month">월선택:</label>
+            <p>{{ form.choice_month }}</p>
+            <button class="btn btn-primary" type="submit">저장</button>
+        </form>
+    </div>
+{% endblock %}

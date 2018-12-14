@@ -6,7 +6,7 @@ admin.site.register(YearList)
 
 
 class MonthListAdmin(admin.ModelAdmin):
-	list_display = ('make_year', 'choice_month')
+	list_display = ('pk', 'make_year', 'choice_month')
 
 
 admin.site.register(MonthList, MonthListAdmin)
