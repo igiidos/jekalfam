@@ -34,12 +34,12 @@
                         <td class="text-success">{{ detail.money }}</td>
                         <td> </td>
                         <td id="id_memo_{{ detail.pk }}">{{ detail.memo }}</td>
-                        <td id="id_reset_{{ detail.pk }}" class="d-none"><a href="#" class="text-info">수정</a>/<a href="#" class="text-danger">삭제</a></td>
+                        <td id="id_reset_{{ detail.pk }}" class="d-none"><a href="{% url 'fee_update' month.pk detail.pk %}" class="text-info">수정</a>/<a href="{% url 'fee_delete' month.pk detail.pk %}" class="text-danger">삭제</a></td>
                     {% elif detail.using == 'out' %}
                         <td> </td>
                         <td class="text-danger">{{ detail.money }}</td>
                         <td id="id_memo_{{ detail.pk }}">{{ detail.memo }}</td>
-                        <td id="id_reset_{{ detail.pk }}" class="d-none"><a href="#" class="text-info">수정</a>/<a href="#" class="text-danger">삭제</a></td>
+                        <td id="id_reset_{{ detail.pk }}" class="d-none"><a href="#" class="text-info">수정</a>/<a href="{% url 'fee_delete' month.pk detail.pk %}" class="text-danger">삭제</a></td>
                     {% endif %}
                 </tr>
             {% endfor %}

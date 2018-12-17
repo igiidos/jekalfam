@@ -1,0 +1,22 @@
+{% extends "membership_app/__base.html" %}
+
+{% block content %}
+    <div class="container-fluid py-3">
+        <form action="" method="post" class="form-group">{% csrf_token %}
+            <label for="id_members">맴버:</label>
+            <p>{{ forms.members }}</p>
+            <label for="id_using">입/출금:</label>
+            <p>{{ forms.using }}</p>
+            <label for="id_money">맴버:</label>
+            <p>{{ forms.money }}</p>
+            <label for="id_memo">Memo:</label>
+            <p>{{ forms.memo }}</p>
+
+            <div class="col-12">
+
+            </div>
+
+            <button class="btn btn-primary" type="submit">저장</button>
+        </form>
+    </div>
+{% endblock %}

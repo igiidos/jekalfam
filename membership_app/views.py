@@ -80,3 +80,30 @@ def add_fee_formset(request, pk):
 		'formset': formset
 	}
 	return render(request, 'membership_app/add_fee_formset.html', context)
+
+
+def fee_delete(request, month_pk, detail_pk):
+	instance = FeeManager.objects.get(pk=detail_pk)
+	instance.delete()
+	pk = month_pk
+	return redirect('month_detail', pk)
+
+
+def fee_update(request, month_pk, detail_pk):
+	fee = FeeManager.objects.get(pk=detail_pk)
+	month = MonthList.objects.get(pk=month_pk)
+	if request.method == 'POST':
+		forms = AddFeeForm(request.POST, instance=fee)
+		if forms.is_valid():
+			post = forms.save(commit=False)
+			post.select_month = month
+			post.save()
+			return redirect('month_detail', pk=month_pk)
+	else:
+		forms = AddFeeForm(instance=fee)
+
+	context = {
+		'month' : month,
+		'forms': forms,
+	}
+	return render(request, 'membership_app/fee_update.html', context)
