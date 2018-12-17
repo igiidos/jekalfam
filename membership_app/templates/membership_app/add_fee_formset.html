@@ -1,0 +1,44 @@
+{% extends "membership_app/__base.html" %}
+
+{% block style %}
+    <style>
+    .textarea-width{
+        width: 100%;
+    }
+    </style>
+
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid text-center small mt-2">
+        <p class="h6 text-secondary">최대 5명 일괄 입력가능</p>
+        <p class="h6 text-danger">반드시 맨 윗칸부터 순차적 입력</p>
+        <form action="" method="post" class="form-inline my-3">{% csrf_token %}
+            {{ formset.management_form }}
+            {% for form in formset %}
+                <div class="row bg-light border mb-3 py-3">
+                    <div class="col-4">
+                        <span class="text-secondary">{{ form.members.label }}</span>
+                        <span>{{ form.members }}</span>
+                    </div>
+                    <div class="col-4">
+                        <span class="text-secondary">{{ form.using.label }}</span>
+                        <span>{{ form.using }}</span>
+                    </div>
+                    <div class="col-4">
+                        <span class="text-secondary">{{ form.money.label }}</span>
+                        <span>{{ form.money }}</span>
+                    </div>
+                    <div class="col-12">
+                        <span class="text-secondary">{{ form.memo.label }}</span>
+                        <span class="w-100">{{ form.memo }}</span>
+                    </div>
+                </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-block btn-primary fixed-bottom rounded-0">저장</button>
+        </form>
+    </div>
+{% endblock %}
+
+{% block script %}
+{% endblock %}
