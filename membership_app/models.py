@@ -1,6 +1,8 @@
 from django.db import models
 from django.conf import settings
 from django.db.models import Sum
+from django.contrib.auth import get_user_model
+
 
 
 choice_month = (
@@ -57,6 +59,11 @@ class MonthList(models.Model):
 			return 120000
 		if self.total_in() is not None:
 			return 120000-int(self.total_in()['money__sum'])
+
+	def who_no_in(self):
+		get_usermodel = get_user_model()
+		no_payed = get_usermodel.objects.all()
+		return no_payed
 
 	def __str__(self):
 		return self.choice_month

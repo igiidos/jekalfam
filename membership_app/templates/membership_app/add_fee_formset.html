@@ -11,9 +11,12 @@
 
 {% block content %}
     <div class="container-fluid text-center small mt-2">
-        <p class="h6 text-secondary">최대 5명 일괄 입력가능</p>
-        <p class="h6 text-danger">반드시 맨 윗칸부터 순차적 입력</p>
-        <form action="" method="post" class="form-inline my-3">{% csrf_token %}
+        <a href="javascript:history.back()" class=""><p class="h6 text-left text-secondary font-weight-bold"><i class="fas fa-arrow-left"></i> {{ month.make_year }}{{ month.choice_month }}월 회비 입력</p></a>
+        <div class="col-12 alert alert-warning py-1">
+            <p class="mb-0 text-left"><i class="far fa-star"></i> 최대 5명 일괄 입력가능</p>
+            <p class="mb-0 text-left font-weight-bold"><i class="far fa-star"></i> 반드시 맨 윗칸부터 순차적 입력</p>
+        </div>
+        <form action="" method="post" class="form-inline mt-1 mb-5">{% csrf_token %}
             {{ formset.management_form }}
             {% for form in formset %}
                 <div class="row bg-light border mb-3 py-3">

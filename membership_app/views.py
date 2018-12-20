@@ -4,7 +4,8 @@ from django.contrib.auth.decorators import login_required
 from .models import FeeManager, MonthList, YearList
 from .forms import MonthListForm, AddFeeForm
 from django.forms.formsets import formset_factory
-from django.views.generic.edit import FormView
+from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.db import IntegrityError
 
 # Create your views here.
@@ -49,11 +50,13 @@ def add_month(request):
 
 @login_required
 def month_detail(request, pk):
+	user_lists = get_user_model()
 	month = MonthList.objects.get(pk=pk)
 	details = FeeManager.objects.filter(select_month=month, status='on')
+
 	context = {
 		'month': month,
-		'details': details
+		'details': details,
 	}
 	return render(request, 'membership_app/month_detail.html', context)
 
@@ -77,7 +80,8 @@ def add_fee_formset(request, pk):
 		formset = bring_formset()
 
 	context = {
-		'formset': formset
+		'formset': formset,
+		'month': month,
 	}
 	return render(request, 'membership_app/add_fee_formset.html', context)
 
