@@ -2,67 +2,67 @@
 
 {% block content %}
 
-<div class="border">
-    {% for foo in month.who_no_in %}
-    {{ foo }}
-    {% endfor %}
-</div>
-
-
-
-
-    <div class="container-fluid text-center small mt-2">
-        <a href="{% url 'monthly_list' %}" class=""><p class="h6 text-left text-secondary font-weight-bold"><i class="fas fa-arrow-left"></i> {{ month.make_year }}{{ month.choice_month }}월 회비 현황</p></a>
-        <div class="text-center bg-secondary py-2">
-            {% if month.total_in.money__sum %}
-                <span class="text-white">납입: {{ month.total_in.money__sum }}원</span>
-            {% else %}
-                <span class="text-white">납입: 0원</span>
-            {% endif %}
-            {% if month.total_out.money__sum %}
-                <span class="text-white">| 지출: {{ month.total_out.money__sum }}원</span>
-            {% else %}
-                <span class="text-white">| 지출: 0원</span>
-            {% endif %}
-            <span class="text-white">| 미납:{{ month.total_no_in }}</span>
-        </div>
-        <table class="table table-striped">
-            <thead>
+<div class="container-fluid text-center small mt-2">
+    <a href="{% url 'monthly_list' %}" class=""><p class="h6 text-left text-secondary font-weight-bold"><i class="fas fa-arrow-left"></i> {{ month.make_year }}{{ month.choice_month }}월 회비 현황</p></a>
+    <div class="text-center bg-secondary py-2">
+        {% if month.total_in.money__sum %}
+            <span class="text-white">납입: {{ month.total_in.money__sum }}원</span>
+        {% else %}
+            <span class="text-white">납입: 0원</span>
+        {% endif %}
+        {% if month.total_out.money__sum %}
+            <span class="text-white">| 지출: {{ month.total_out.money__sum }}원</span>
+        {% else %}
+            <span class="text-white">| 지출: 0원</span>
+        {% endif %}
+        <span class="text-white">| 미납:{{ month.total_no_in }}</span>
+    </div>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">이름</th>
+            <th scope="col">입금</th>
+            <th scope="col">출금</th>
+            <th scope="col" id="id_memo1">비고</th>
+            <th scope="col" id="id_reset1" class="d-none">RESET</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for detail in details %}
             <tr>
-                <th scope="col">이름</th>
-                <th scope="col">입금</th>
-                <th scope="col">출금</th>
-                <th scope="col" id="id_memo1">비고</th>
-                <th scope="col" id="id_reset1" class="d-none">RESET</th>
+                <th scope="row">{{ detail.members }}</th>
+                {% if detail.using == 'in' %}
+                    <td class="text-success">{{ detail.money }}</td>
+                    <td> </td>
+                    <td id="id_memo_{{ detail.pk }}">{{ detail.memo }}</td>
+                    <td id="id_reset_{{ detail.pk }}" class="d-none"><a href="{% url 'fee_update' month.pk detail.pk %}" class="text-info">수정</a>/<a href="{% url 'fee_delete' month.pk detail.pk %}" class="text-danger">삭제</a></td>
+                {% elif detail.using == 'out' %}
+                    <td> </td>
+                    <td class="text-danger">{{ detail.money }}</td>
+                    <td id="id_memo_{{ detail.pk }}">{{ detail.memo }}</td>
+                    <td id="id_reset_{{ detail.pk }}" class="d-none"><a href="#" class="text-info">수정</a>/<a href="{% url 'fee_delete' month.pk detail.pk %}" class="text-danger">삭제</a></td>
+                {% endif %}
             </tr>
-            </thead>
-            <tbody>
-            {% for detail in details %}
-                <tr>
-                    <th scope="row">{{ detail.members }}</th>
-                    {% if detail.using == 'in' %}
-                        <td class="text-success">{{ detail.money }}</td>
-                        <td> </td>
-                        <td id="id_memo_{{ detail.pk }}">{{ detail.memo }}</td>
-                        <td id="id_reset_{{ detail.pk }}" class="d-none"><a href="{% url 'fee_update' month.pk detail.pk %}" class="text-info">수정</a>/<a href="{% url 'fee_delete' month.pk detail.pk %}" class="text-danger">삭제</a></td>
-                    {% elif detail.using == 'out' %}
-                        <td> </td>
-                        <td class="text-danger">{{ detail.money }}</td>
-                        <td id="id_memo_{{ detail.pk }}">{{ detail.memo }}</td>
-                        <td id="id_reset_{{ detail.pk }}" class="d-none"><a href="#" class="text-info">수정</a>/<a href="{% url 'fee_delete' month.pk detail.pk %}" class="text-danger">삭제</a></td>
-                    {% endif %}
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-        {% if request.user.is_staff %}
+        {% endfor %}
+        {% for who in month.who_no_in %}
+        <tr>
+            <th scope="row">{{ who }}</th>
+            <td class="text-danger">미납</td>
+            <td></td>
+            <td class="n-none"></td>
+        </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+    {% if request.user.is_staff %}
         <div class="text-right">
             <a href="{% url 'add_fee_formset' pk=month.pk %}" class="btn btn-primary btn-sm">입출금입력</a>
             <button class="btn btn-outline-danger btn-sm" id="id_reset" value="in">수정/삭제</button>
         </div>
-        {% endif %}
+    {% endif %}
 
-    </div>
+</div>
 {% endblock %}
 {% block script %}
     <script>

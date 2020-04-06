@@ -7,7 +7,12 @@
                 <div class="col-12">
                     <p class="card-text mb-0 text-light">총납입 : {{ total_in.money__sum }}원</p>
                     <p class="card-text mb-0 text-light">총미납 : {{ total_less }}원</p>
-                    <p class="card-text mb-0 text-light">총출금 : {{ total_out.money__sum }}원</p>
+                    {% if total_out != 0 %}
+                        <p class="card-text mb-0 text-light">총출금 : {{ total_out.money__sum }}원</p>
+                    {% else %}
+                        <p class="card-text mb-0 text-light">총출금 : 0원</p>
+                    {% endif %}
+
                     <p class="card-text mb-1 text-light">현잔액 : {{ total_result }}원</p>
                 </div>
             </div>
@@ -41,10 +46,10 @@
                             {% endif %}
                         </div>
                         {% if request.user.is_staff %}
-                        <div class="col-12 text-right">
-    {#                        <span class="text-secondary small">은지만보임 -> </span>#}
-                            <a href="#" class="badge badge-danger"><i class="far fa-trash-alt"></i> delete</a>
-                        </div>
+                            <div class="col-12 text-right">
+                                {#                        <span class="text-secondary small">은지만보임 -> </span>#}
+                                <a href="#" class="badge badge-danger"><i class="far fa-trash-alt"></i> delete</a>
+                            </div>
                         {% endif %}
                     </div>
                 </div>
