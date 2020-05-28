@@ -80,11 +80,12 @@ def add_fee_formset(request, pk):
             for form in formset:
                 if form.is_valid():
                     post = form.save(commit=False)
-                    post.select_month = month
-                    try:
-                        post.save()
-                    except IntegrityError:
-                        pass
+                    if post.members != '회원명':
+                        post.select_month = month
+                        try:
+                            post.save()
+                        except IntegrityError:
+                            pass
             return redirect('month_detail', pk)
     else:
         formset = bring_formset()
