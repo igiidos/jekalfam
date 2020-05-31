@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.db.models import Sum
 from django.contrib.auth.decorators import login_required
-from .models import FeeManager, MonthList, YearList
+from .models import FeeManager, MonthList, YearList, member_list
 from .forms import MonthListForm, AddFeeForm
 from django.forms.formsets import formset_factory
 from django.conf import settings
@@ -122,3 +122,77 @@ def fee_update(request, month_pk, detail_pk):
         'forms': forms,
     }
     return render(request, 'membership_app/fee_update.html', context)
+
+
+'''
+data = {
+    남영경 : {
+        미납 : [
+            3월, 4월, 5월
+        ],
+        미납count월 : 3,
+        완납 : False
+    },
+    제갈익 : {
+        미납 : [],
+        미납count월 : 0,
+        완납 : True
+    }
+}
+'''
+
+
+def fee_status_in_member_list(request):
+    fee_status = dict()
+    for member in member_list:
+        person = {
+            'yes_fee': True,
+            'yes_fee_count': 0,
+            'no_fee_month': [],
+            'no_fee_count': 0
+        }
+        for month in MonthList.objects.all():
+            if month.fee_manager_month.filter(members=member).exists():
+                person['yes_fee_count'] += month.month_fee
+            else:
+                person['yes_fee'] = False
+                person['no_fee_month'].append('{}-{}월'.format(month.make_year.years, month))
+                person['no_fee_count'] += month.month_fee
+
+        fee_status[member] = person
+
+    month_list = MonthList.objects.all()
+    total_fee = FeeManager.objects.filter(using='in')
+    total_in = total_fee.aggregate(Sum('money'))
+    expect_total = 0
+    for month in month_list:
+        each_month = month.expect_total_monthly_fee()
+        expect_total += each_month
+
+    total_less = expect_total - total_in['money__sum']
+
+    if FeeManager.objects.filter(using='out'):
+        total_out = FeeManager.objects.filter(using='out').aggregate(Sum('money'))
+        total_result = total_in['money__sum'] - total_out['money__sum']
+    else:
+        total_out = 0
+        total_result = total_in['money__sum']
+    #
+    # context = {
+    #     'month_list': month_list,
+    #     'total_in': total_in,
+    #     'total_out': total_out,
+    #     'total_less': total_less,
+    #     'total_result': total_result,
+    #
+    # }
+
+    context = {
+        'fee_status': fee_status,
+        'total_in': total_in,
+        'total_out': total_out,
+        'total_less': total_less,
+        'total_result': total_result,
+    }
+
+    return render(request, 'membership_app/fee_status_in_member_list.html', context)

@@ -1,0 +1,60 @@
+{% extends "membership_app/__base.html" %}
+
+{% block content %}
+    <div class="container-fluid py-3" style="background-color: #dddddd">
+        <div class="card my-2 border-0 shadow-sm bg-dark">
+            <div class="card-body">
+                <div class="col-12">
+                    <p class="card-text mb-0 text-light">총납입 : {{ total_in.money__sum }}원</p>
+                    <p class="card-text mb-0 text-light">총미납 : {{ total_less }}원</p>
+                    {% if total_out != 0 %}
+                        <p class="card-text mb-0 text-light">총출금 : {{ total_out.money__sum }}원</p>
+                    {% else %}
+                        <p class="card-text mb-0 text-light">총출금 : 0원</p>
+                    {% endif %}
+
+                    <p class="card-text mb-1 text-light">현잔액 : {{ total_result }}원</p>
+                </div>
+            </div>
+        </div>
+
+        {% for fee, values in fee_status.items %}
+{#            <a href="{% url 'month_detail' pk=month.pk %}" class="btn btn-block p-0 text-left">#}
+            {% if values.yes_fee is True %}
+                <div class="card border-0 shadow-sm my-1" style="background-color: #dbdbff">
+            {% else %}
+                <div class="card border-0 shadow-sm my-1" style="background-color: #ffe6e6">
+            {% endif %}
+
+                <div class="card-body px-2 py-1 d-flex align-items-center">
+                    <div style="width: 4rem;" class="float-left">
+                        {#                            <span class="text-muted small mr-2">{{ month.make_year }}</span>#}
+                        <h5 class="card-title text-secondary mb-0">{{ fee }}</h5>
+                    </div>
+                <!--
+                person = {
+                    'yes_fee': True,
+                    'yes_fee_count': 0,
+                    'no_fee_month': [],
+                    'no_fee_count': 0
+                }
+                -->
+                    <div class="float-right" style="width: 15rem;">
+                        <div class="col-12">
+                            <span class="card-text mb-0 text-primary small"><i class="fas fa-sign-in-alt"></i> 입금 : {{ values.yes_fee_count }}원 {% if values.yes_fee is True %}<span class="font-weight-bold badge badge-primary">완납!!</span>{% endif %}</span>
+                        </div>
+                        <div class="col-12">
+                            <span class="card-text mb-0 text-danger small"><i class="fas fa-times-circle"></i> 미납 : {{ values.no_fee_count }}원</span>
+                        </div>
+                        <div class="col-12">
+                            <span class="card-text mb-0 text-danger small"><i class="far fa-calendar-times"></i> 부족회차 : {% if values.no_fee_month %}<span style="font-size: 0.5rem;">{% for i in values.no_fee_month %}{{ i }}, {% endfor %}</span>{% else %}없음{% endif %}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+{#            </a>#}
+        {% endfor %}
+    </div>
+
+
+{% endblock %}

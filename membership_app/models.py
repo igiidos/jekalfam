@@ -74,10 +74,10 @@ class MonthList(models.Model):
         return self.month_fee * (len(members) - 1)
 
     def total_in(self):
-        return self.feemanager_set.filter(status='on', using='in').aggregate(Sum('money'))
+        return self.fee_manager_month.filter(status='on', using='in').aggregate(Sum('money'))
 
     def total_out(self):
-        return self.feemanager_set.filter(status='on', using='out').aggregate(Sum('money'))
+        return self.fee_manager_month.filter(status='on', using='out').aggregate(Sum('money'))
 
     def total_no_in(self):
         if self.total_in()['money__sum'] is None:
@@ -87,7 +87,7 @@ class MonthList(models.Model):
 
     def who_no_in(self):
         copy_all_members = member_list.copy()
-        for paid in self.feemanager_set.filter(status='on', using='in'):
+        for paid in self.fee_manager_month.filter(status='on', using='in'):
             name = paid.members
             if name in copy_all_members:
                 copy_all_members.remove(name)
@@ -99,7 +99,7 @@ class MonthList(models.Model):
 
 
 class FeeManager(models.Model):
-    select_month = models.ForeignKey('MonthList', on_delete=models.CASCADE)
+    select_month = models.ForeignKey('MonthList', on_delete=models.CASCADE, related_name='fee_manager_month')
     members = models.CharField(max_length=10, choices=members, default='회원명')
     using = models.CharField(max_length=3, choices=using, default='in')
     money = models.IntegerField(default=10000)
