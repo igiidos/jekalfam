@@ -86,14 +86,12 @@ class MonthList(models.Model):
             return self.expect_total_monthly_fee()-int(self.total_in()['money__sum'])
 
     def who_no_in(self):
-        print(member_list)
         copy_all_members = member_list.copy()
         for paid in self.feemanager_set.filter(status='on', using='in'):
             name = paid.members
             if name in copy_all_members:
                 copy_all_members.remove(name)
 
-        print(copy_all_members)
         return copy_all_members
 
     def __str__(self):
