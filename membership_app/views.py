@@ -11,7 +11,7 @@ from django.db import IntegrityError
 # Create your views here.
 
 
-@ login_required
+# @ login_required
 def monthly_list(request):
     month_list = MonthList.objects.all()
     total_fee = FeeManager.objects.filter(using='in')
@@ -58,7 +58,7 @@ def add_month(request):
     return render(request, 'membership_app/add_month.html', context)
 
 
-@login_required
+# @login_required
 def month_detail(request, pk):
     user_lists = get_user_model()
     month = MonthList.objects.get(pk=pk)
