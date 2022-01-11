@@ -25,7 +25,10 @@ SECRET_KEY = 'f7&3rtp49zz*t45ywcl5^#hd0p_8@3-^ly^fkhqub*jn%7d3-g'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+if os.environ['IS_ENV'] == 'local':
+    ALLOWED_HOSTS = ['*']
+else:
+    ALLOWED_HOSTS = ['family.ikjekal.com']
 
 # Application definition
 
@@ -141,8 +144,9 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-CSRF_TRUSTED_ORIGINS = ['family.ikjekal.com']
+if os.environ['IS_ENV'] != 'local':
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    CSRF_TRUSTED_ORIGINS = ['family.ikjekal.com']
