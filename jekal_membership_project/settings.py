@@ -28,7 +28,7 @@ DEBUG = True
 if os.environ['IS_ENV'] == 'local':
     ALLOWED_HOSTS = ['*']
 else:
-    ALLOWED_HOSTS = ['family.ikjekal.com']
+    ALLOWED_HOSTS = ['family.ikjekal.com', 'ec2-3-35-51-162.ap-northeast-2.compute.amazonaws.com']
 
 # Application definition
 
