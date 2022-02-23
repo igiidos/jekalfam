@@ -25,11 +25,14 @@ SECRET_KEY = 'f7&3rtp49zz*t45ywcl5^#hd0p_8@3-^ly^fkhqub*jn%7d3-g'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-if os.environ['IS_ENV'] == 'local':
-    ALLOWED_HOSTS = ['*']
-else:
-    ALLOWED_HOSTS = ['family.ikjekal.com', 'ec2-3-35-51-162.ap-northeast-2.compute.amazonaws.com']
+try:
+    if os.environ['IS_ENV'] == 'local':
+        ALLOWED_HOSTS = ['*']
+    else:
+        ALLOWED_HOSTS = ['family.ikjekal.com', 'ec2-3-35-51-162.ap-northeast-2.compute.amazonaws.com']
 
+except Exception as e:
+    ALLOWED_HOSTS = ['family.ikjekal.com', 'ec2-3-35-51-162.ap-northeast-2.compute.amazonaws.com']
 # Application definition
 
 INSTALLED_APPS = [
