@@ -29,10 +29,10 @@ try:
     if os.environ['IS_ENV'] == 'local':
         ALLOWED_HOSTS = ['*']
     else:
-        ALLOWED_HOSTS = ['family.ikjekal.com', 'ec2-3-35-51-162.ap-northeast-2.compute.amazonaws.com']
+        ALLOWED_HOSTS = ['family.ikjekal.com', 'ec2-3-35-51-162.ap-northeast-2.compute.amazonaws.com', '0.0.0.0']
 
 except Exception as e:
-    ALLOWED_HOSTS = ['family.ikjekal.com', 'ec2-3-35-51-162.ap-northeast-2.compute.amazonaws.com']
+    ALLOWED_HOSTS = ['family.ikjekal.com', 'ec2-3-35-51-162.ap-northeast-2.compute.amazonaws.com', '0.0.0.0']
 # Application definition
 
 INSTALLED_APPS = [
