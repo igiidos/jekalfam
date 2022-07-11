@@ -23,7 +23,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'f7&3rtp49zz*t45ywcl5^#hd0p_8@3-^ly^fkhqub*jn%7d3-g'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+try:
+    if os.environ['IS_ENV'] == 'local':
+        DEBUG = True
+    else:
+        DEBUG = False
+except Exception as e:
+    DEBUG = False
 
 try:
     if os.environ['IS_ENV'] == 'local':
@@ -45,6 +51,7 @@ INSTALLED_APPS = [
     'membership_app',
     'index_app',
     'accounts',
+    'personal_app',
 ]
 
 MIDDLEWARE = [
