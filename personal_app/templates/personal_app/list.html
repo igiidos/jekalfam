@@ -1,10 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
     <!-- **DO THIS**: -->
     <!--   Replace SDK_VERSION_NUMBER with the current SDK version number -->
     {#    <script src="https://sdk.amazonaws.com/js/aws-sdk-SDK_VERSION_NUMBER.js"></script>#}
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.283.1.min.js"></script>
+
 
     <script>
         const albumBucketName = "mypersonal-ik";
@@ -38,7 +41,7 @@
                         var albumName = decodeURIComponent(prefix.replace('/', ''));
                         return getHtml([
                             '<li>',
-                            '<span onclick="deleteAlbum(\'' + albumName + '\')">X</span>',
+                            '<span style="color: red" onclick="deleteAlbum(\'' + albumName + '\')">X</span>',
                             '<span onclick="viewAlbum(\'' + albumName + '\')">',
                             albumName,
                             '</span>',
@@ -48,7 +51,7 @@
                     var message = albums.length ?
                         getHtml([
                             '<p>Click on an album name to view it.</p>',
-                            '<p>Click on the X to delete the album.</p>'
+                            '<p>Click on the <span style="color: red">X</span> to delete the album.</p>'
                         ]) :
                         '<p>You do not have any albums. Please Create album.';
                     var htmlTemplate = [
@@ -116,7 +119,7 @@
                         link_tag = '<img style="width:128px;height:128px;" src="' + photoUrl + '"/>'
                     } else {
 
-                        link_tag = '<video controls width="250"><source src="'+photoUrl+'" type="video/mp4"></video>'
+                        link_tag = '<video controls width="100%"><source src="' + photoUrl + '" type="video/mp4"></video>'
                         console.log(link_tag)
                         {#link_tag = '<video width="400" controls="controls" preload="metadata"><source src="https://www.w3schools.com/html/mov_bbb.mp4#t=0.5" type="video/mp4"></video>'#}
                     }
@@ -127,7 +130,7 @@
                         link_tag,
                         "</div>",
                         "<div>",
-                        "<span onclick=\"deletePhoto('" +
+                        "<span style=\"color: red\" onclick=\"deletePhoto('" +
                         albumName +
                         "','" +
                         photoKey +
@@ -141,33 +144,40 @@
                         "</span>"
                     ]);
                 });
+
                 var message = photos.length
-                    ? "<p>Click on the X to delete the photo</p>"
+                    ? "<p>Click on the <span style='color: red'>X</span> to delete the photo</p>"
                     : "<p>You do not have any photos in this album. Please add photos.</p>";
                 var htmlTemplate = [
+                    '<button style="margin-top: 20px" onclick="listAlbums()">',
+                    "< Back To Albums",
+                    "</button>",
                     "<h2>",
                     "Album: " + albumName,
                     "</h2>",
                     message,
-                    "<div>",
-                    getHtml(photos),
-                    "</div>",
+                    "<span>Press Add Photo button after select file</span>",
                     '<input id="photoupload" type="file" accept="image/*">',
                     '<button id="addphoto" onclick="addPhoto(\'' + albumName + "')\">",
                     "Add Photo",
                     "</button>",
-                    '<button onclick="listAlbums()">',
-                    "Back To Albums",
-                    "</button>"
+
+                    "<div style='margin-top: 30px'>",
+                    getHtml(photos),
+                    "</div>"
                 ];
                 document.getElementById("app").innerHTML = getHtml(htmlTemplate);
             });
         }
 
         function addPhoto(albumName) {
+            const btn = document.getElementById("addphoto");
             var files = document.getElementById("photoupload").files;
             if (!files.length) {
                 return alert("Please choose a file to upload first.");
+            } else {
+                btn.innerText = 'uploading... wait..'
+                btn.disabled = true;
             }
             var file = files[0];
             var fileName = file.name;
@@ -234,6 +244,7 @@
 </head>
 <body>
 <h1>My Photo Albums App</h1>
+
 <div id="app"></div>
 </body>
 </html>
