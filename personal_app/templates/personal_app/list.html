@@ -6,19 +6,23 @@
     <!-- **DO THIS**: -->
     <!--   Replace SDK_VERSION_NUMBER with the current SDK version number -->
     {#    <script src="https://sdk.amazonaws.com/js/aws-sdk-SDK_VERSION_NUMBER.js"></script>#}
-    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.283.1.min.js"></script>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1171.0.min.js"></script>
 
 
     <script>
         const albumBucketName = "mypersonal-ik";
-        const bucketRegion = "ap-northeast-2";
-        const IdentityPoolId = "ap-northeast-2:4678854b-ede0-447c-b3f6-6aadb2f2ae2f";
+        const bucketRegion = "ap-northeast-2"; // ap-northeast-2:688ad46e-704c-478b-bd14-6b4606466ee9
+
+        {#const IdentityPoolId = "ap-northeast-2:4678854b-ede0-447c-b3f6-6aadb2f2ae2f";#}
+        const IdentityPoolId = "ap-northeast-2:688ad46e-704c-478b-bd14-6b4606466ee9";
+        const accessKey = "AKIA2MWKF3JVTLSJF76X"
+        const secretKey = "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"
 
         AWS.config.update({
             region: bucketRegion,
             credentials: new AWS.CognitoIdentityCredentials({
                 IdentityPoolId: IdentityPoolId
-            })
+             })
         });
 
         var s3 = new AWS.S3({
@@ -32,13 +36,16 @@
 
 
         function listAlbums() {
-            s3.listObjects({Delimiter: '/'}, function (err, data) {
+            s3.listObjectsV2({Delimiter: '/'}, function (err, data) {
                 if (err) {
                     return alert('There was an error listing your albums: ' + err.message);
                 } else {
-                    var albums = data.CommonPrefixes.map(function (commonPrefix) {
-                        var prefix = commonPrefix.Prefix;
-                        var albumName = decodeURIComponent(prefix.replace('/', ''));
+
+                    var albums = data.Contents.map(function (commonPrefix) {
+                        console.log(commonPrefix)
+                        let albumName = commonPrefix.Key
+                        {#var prefix = commonPrefix.Prefix;#}
+                        {#var albumName = decodeURIComponent(prefix.replace('/', ''));#}
                         return getHtml([
                             '<li>',
                             '<span style="color: red" onclick="deleteAlbum(\'' + albumName + '\')">X</span>',
