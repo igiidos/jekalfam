@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'index_app',
     'accounts',
     'personal_app',
+    'storages'
 ]
 
 MIDDLEWARE = [
@@ -153,6 +154,19 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+STATICFILES_STORAGE = 'jekal_membership_project.storage.StaticStorage'
+DEFAULT_FILE_STORAGE = 'jekal_membership_project.storage.MediaStorage'
+
+# S3 파일 관리에 필요한 최소 설정
+# 소스코드에 설정정보를 남기지마세요. 환경변수를 통한 설정 추천
+AWS_DEFAULT_ACL = None
+
+AWS_ACCESS_KEY_ID = 'AKIA2MWKF3JVTLSJF76X'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'jekalfam-storage'
+AWS_S3_REGION_NAME = 'ap-northeast-2'
+AWS_QUERYSTRING_AUTH = False  # 자료 유효기한 없애기
 
 try:
     if os.environ['IS_ENV'] != 'local':
